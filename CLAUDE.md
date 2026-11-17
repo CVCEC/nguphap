@@ -59,6 +59,7 @@ HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/
 - Kiểm tra trước khi đẩy: node tests/cham-viet.test.js và node tests/tro-choi.test.js (mọi vòng chơi hợp lệ, bài mẫu đạt 3 sao).
 - Dữ liệu: data/bai-hoc.js (window.NGU_PHAP). goiY = ghi chú dẫn dắt trên slide, hiện trong nút "Gợi ý cho cha mẹ & thầy cô". dam = ô nền đậm như trên slide.
 - Tranh: assets/tranh/ (tranh vẽ riêng cho bài giảng). Bài không có tranh riêng dùng tranh của chủ đề.
+- Sửa css/ hoặc js/, data/ thì nâng số ?v= trong index.html và bai.html để máy tải bản mới.
 - Khoá lưu sao: nguphap:baiN → { sao: { khoiDong, khamPha, troChoi, luyenTap, vanDung } }. Không đổi tên. Bài viết của bé không được lưu.
 - Chưa có âm thanh: khi có tệp giọng Elio thì thêm nút Nghe; không dùng giọng máy.
 - Màu góc (xanh chàm #5868D0 / #2F3D96 / #E6E9FA) và ảnh Trâu Con (trau-thinking.png, tạm dùng chung với Tiếng Việt cơ bản) lấy từ TTV_DANH_SACH, id "nguphap".
