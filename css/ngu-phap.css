@@ -315,7 +315,7 @@ main.np-chinh { padding: 0 16px 32px; }
 .tc-dau { margin-left: -6px; }
 
 /* Xếp vào giỏ */
-.tc-gio-hang { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; width: 100%; }
+.tc-gio-hang { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 12px; width: 100%; }
 .tc-gio { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 150px; padding: 12px; border-radius: 22px;
   border: 3px dashed var(--ttv-goc); background: var(--ttv-goc-nhat); font: inherit; color: var(--ttv-chu); cursor: pointer; }
 .tc-gio.vui { border-style: solid; border-color: var(--ttv-dung); }
@@ -365,3 +365,17 @@ main.np-chinh { padding: 0 16px 32px; }
   .tc-tranh { padding: 10px 4px; }
 }
 .np-cham-bai > .ttv-nut-phu { justify-self: start; }
+
+/* Lựa chọn bằng chữ, câu hỏi phụ, kết quả "chưa chắc" */
+.tc-hoi { margin: 0; font-weight: 800; font-size: 1.1rem; color: var(--ttv-goc-dam); }
+.tc-lua-chu { display: grid; gap: 4px; justify-items: center; }
+.tc-lua-hinh { font-size: 2rem; line-height: 1.1; }
+.tc-lua-van { font-family: var(--ttv-phong-tap-doc); font-weight: 700; font-size: clamp(1.1rem, 3.6vw, 1.45rem); line-height: 1.35; }
+.tc-luoi-tranh.ba { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.tc-luoi-tranh .tc-tranh:has(.tc-lua-chu) { min-height: 88px; }
+.np-kq-ds li.hoi { background: #FFF6DF; }
+.np-kq-ds li.hoi .dau { color: var(--ttv-chinh-dam); }
+.tc-o-hang.doc, .tc-the-hang.doc { flex-direction: column; align-items: stretch; width: 100%; max-width: 560px; }
+.tc-o-hang.doc .tc-o { min-height: 52px; font-size: 1.15rem; }
+.tc-the-hang.doc .tc-the { font-size: 1.15rem; text-align: left; }
+@media (max-width: 600px) { .tc-gio { padding: 10px 6px; } .tc-gio-ten { font-size: .92rem; } }

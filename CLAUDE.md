@@ -54,9 +54,11 @@ HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/
 - 37 bài, 3 phần: Tập 1 (Bài 1–16: Mở đầu, Cấu tạo từ, Từ loại), Tập 2 (Bài 17–34: Cụm từ, Câu đơn và câu trong văn bản, Câu ghép, Mục đích nói và phủ định), Phần bổ sung (Bài 35–37: Hiểu ý trong hội thoại).
 - Nội dung lấy từ 3 bộ slide bài giảng (16-11-2026), soạn theo giáo trình của Diệp Quang Ban. Không ghi link bản PDF toàn văn của giáo trình lên trang.
 - Trang chủ: index.html (Mục tiêu học tập · Học xong các bạn có thể · Tổng quan nội dung · Hướng dẫn cho cha mẹ & thầy cô · Danh sách bài).
-- Trang bài dùng chung: bai.html#bai-1 … #bai-37. Mỗi bài 4 bước: Khởi động · Khám phá (4 thẻ) · Luyện tập (3 câu, tự đối chiếu gợi ý) · Vận dụng.
+- Trang bài dùng chung: bai.html#bai-1 … #bai-37. Mỗi bài 5 bước: Khởi động · Khám phá (4 thẻ) · Trò chơi · Luyện tập (3 câu, tự đối chiếu gợi ý) · Vận dụng (Trâu Con chấm bài viết).
+- Trò chơi và tiêu chí chấm viết: data/tro-choi.js (window.NP_TRO_CHOI, theo số bài); bộ chơi js/tro-choi.js (chonTranh, xepCau, chamTu, phanLoai); bộ chấm js/cham-viet.js (chấm trên máy, không gửi bài đi). Tiêu chí mem: true chỉ nhắc nhẹ, không trừ sao.
+- Kiểm tra trước khi đẩy: node tests/cham-viet.test.js và node tests/tro-choi.test.js (mọi vòng chơi hợp lệ, bài mẫu đạt 3 sao).
 - Dữ liệu: data/bai-hoc.js (window.NGU_PHAP). goiY = ghi chú dẫn dắt trên slide, hiện trong nút "Gợi ý cho cha mẹ & thầy cô". dam = ô nền đậm như trên slide.
 - Tranh: assets/tranh/ (tranh vẽ riêng cho bài giảng). Bài không có tranh riêng dùng tranh của chủ đề.
-- Khoá lưu sao (mới): nguphap:baiN → { sao: { khoiDong, khamPha, luyenTap, vanDung } }. Không đổi tên.
+- Khoá lưu sao: nguphap:baiN → { sao: { khoiDong, khamPha, troChoi, luyenTap, vanDung } }. Không đổi tên. Bài viết của bé không được lưu.
 - Chưa có âm thanh: khi có tệp giọng Elio thì thêm nút Nghe; không dùng giọng máy.
 - Màu góc (xanh chàm #5868D0 / #2F3D96 / #E6E9FA) và ảnh Trâu Con (trau-thinking.png, tạm dùng chung với Tiếng Việt cơ bản) lấy từ TTV_DANH_SACH, id "nguphap".

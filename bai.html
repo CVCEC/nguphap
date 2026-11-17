@@ -252,14 +252,15 @@
       var sao = tao("div", "np-kq-sao"); sao.setAttribute("aria-label", r.sao + " trên 3 sao");
       for (var i = 0; i < 3; i++) sao.appendChild(tao("span", "ttv-sao" + (i < r.sao ? "" : " ttv-sao-tat")));
       chu.appendChild(sao);
-      chu.appendChild(tao("p", "np-kq-loi", r.sao === 3 ? "Các bạn viết đúng hết các yêu cầu rồi. Giỏi quá!"
+      chu.appendChild(tao("p", "np-kq-loi", r.sao === 3 && r.soHoi ? "Các bạn làm đúng những gì mình kiểm tra được. Chỗ có dấu ? mình chưa chắc, các bạn nhờ bố mẹ xem giúp nhé!"
+        : r.sao === 3 ? "Các bạn viết đúng hết các yêu cầu rồi. Giỏi quá!"
         : "Các bạn đúng " + r.soDat + "/" + r.tong + " yêu cầu. Sửa chỗ có dấu ✗ rồi chấm lại nhé!"));
       dauKq.appendChild(chu); bangCham.appendChild(dauKq);
       var ul = tao("ul", "np-kq-ds");
       r.ketQua.forEach(function (k) {
-        var li = tao("li", k.dat ? "dat" : "chua");
-        li.appendChild(tao("span", "dau", k.dat ? "✓" : "✗"));
-        var nd = tao("span"); nd.appendChild(tao("b", null, k.ten)); if (!k.dat && k.nhac) nd.appendChild(tao("span", "nhac", k.nhac));
+        var li = tao("li", k.hoi ? "hoi" : k.dat ? "dat" : "chua");
+        li.appendChild(tao("span", "dau", k.hoi ? "?" : k.dat ? "✓" : "✗"));
+        var nd = tao("span"); nd.appendChild(tao("b", null, k.ten)); if ((!k.dat || k.hoi) && k.nhac) nd.appendChild(tao("span", "nhac", k.nhac));
         li.appendChild(nd); ul.appendChild(li);
       });
       bangCham.appendChild(ul);
