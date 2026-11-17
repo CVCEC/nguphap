@@ -13,3 +13,5 @@ Trang: https://nguphap.cvcec.org (GitHub Pages, kho CVCEC/nguphap).
 - `assets/tranh/` – tranh minh hoạ.
 
 Xem thêm TICH-HOP.md để gắn góc này vào bộ mẫu chung và cổng vietclass.cvcec.org.
+
+Ghi kết quả học: `bai.html` gọi `TTV.ghiKetQua({ bai: "bai-N", hoatDong, soTroChoi, diem, diemToiDa, sao, thoiGianGiay })` của bộ mẫu chung mỗi khi chơi xong một trò (`tro-1`, `tro-2`…, điểm = lượt đúng / lượt đúng + lượt sai), làm xong Luyện tập (`luyen-tap`, điểm = số câu "Giống rồi") và mỗi lần Trâu Con chấm bài viết (`viet`, sao theo bộ chấm); cổng ghi vào tài khoản (ngoài cổng hoặc học thử thì không gửi gì).

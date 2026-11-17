@@ -12,7 +12,7 @@
 <script src="data/bai-hoc.js?v=2"></script>
 <script src="data/tro-choi.js?v=2"></script>
 <script src="js/chung.js?v=2"></script>
-<script src="js/tro-choi.js?v=2"></script>
+<script src="js/tro-choi.js?v=3"></script>
 <script src="js/cham-viet.js?v=2"></script>
 </head>
 <body class="ttv-trang" data-ttv-nen="don-gian">
@@ -61,6 +61,20 @@
     if (!luu.sao[buoc]) { luu.sao[buoc] = 1; NP.ghi(B.so, luu); }
     veThanh(); veBuoc();
   }
+
+  /* Ghi kết quả học lên cổng (TTV.ghiKetQua của bộ mẫu chung; ngoài cổng hoặc học thử thì bộ mẫu bỏ qua).
+     Hoạt động có tính điểm: "tro-1", "tro-2"… (trò chơi), "luyen-tap" (3 câu tự đối chiếu), "viet" (Trâu Con chấm bài viết). */
+  function soTroChoi() {
+    var t = NP.troChoi(B.so);
+    return (t.troChoi ? t.troChoi.length : 0) + (B.luyenTap && B.luyenTap.length ? 1 : 0) + (t.chamViet && window.NPChamViet ? 1 : 0);
+  }
+  function saoTheoTiLe(diem, toiDa) { var r = toiDa ? diem / toiDa : 0; return r >= 0.9 ? 3 : r >= 0.6 ? 2 : r > 0 ? 1 : 0; }
+  function ghiKetQua(hoatDong, diem, diemToiDa, sao, giay) {
+    try {
+      if (window.TTV && TTV.ghiKetQua) TTV.ghiKetQua({ bai: "bai-" + B.so, hoatDong: hoatDong, soTroChoi: soTroChoi(), diem: diem, diemToiDa: diemToiDa, sao: sao, thoiGianGiay: giay });
+    } catch (e) {}
+  }
+  function giayTu(t) { return t ? Math.round((Date.now() - t) / 1000) : 0; }
 
   // Khách học thử (trong cổng): chỉ mở bài thử; bộ mẫu chung lo màn mời đăng nhập
   function kiemTraHocThu(lan) {
@@ -169,6 +183,9 @@
     NPTroChoi.ve(khung, NP.troChoi(B.so).troChoi, { xong: function (hang) {
       choSao("troChoi");
       hang.appendChild(nut("ttv-nut phai", "Sang Luyện tập ›", function () { moBuoc("luyenTap"); }));
+    }, xongTro: function (j, kq) {
+      var dung = Math.max(kq.dung, 1), toiDa = dung + kq.sai;
+      ghiKetQua("tro-" + (j + 1), dung, toiDa, saoTheoTiLe(dung, toiDa), kq.giay);
     } });
     var gy = goiY(["Trò chơi giúp bé luyện lại điều vừa khám phá. Nếu bé chọn sai, hãy hỏi: “Con nhìn xem từ nào đứng đầu câu?” rồi để bé tự thử lại. Bé có thể chơi lại nhiều lần."]);
     if (gy) m.appendChild(gy);
@@ -178,10 +195,15 @@
   function veLuyenTap() {
     var m = $("man-luyenTap"); m.textContent = "";
     m.appendChild(trauNoi("trau-reading.png", ["Các bạn thử sức với 3 câu này nhé!", "Nói to câu trả lời trước, viết vào ô nếu muốn, rồi bấm “Xem gợi ý” để đối chiếu."]));
-    var ds = tao("div", "np-lt"), xong = 0;
+    var ds = tao("div", "np-lt"), xong = 0, giongNgay = 0, batDauLT = 0;
     var nutTiep = nut("ttv-nut phai", "Sang Vận dụng ›", function () { moBuoc("vanDung"); });
     var nhac = tao("p", "np-ghi-chu-nho", "Các bạn làm đủ 3 câu để nhận sao nhé.");
-    function capNhat() { if (xong === B.luyenTap.length) { choSao("luyenTap"); nhac.textContent = "Các bạn làm xong cả 3 câu rồi. Được 1 sao!"; } }
+    function capNhat() {
+      if (xong === B.luyenTap.length) {
+        choSao("luyenTap"); nhac.textContent = "Các bạn làm xong cả 3 câu rồi. Được 1 sao!";
+        ghiKetQua("luyen-tap", giongNgay, B.luyenTap.length, saoTheoTiLe(giongNgay, B.luyenTap.length), giayTu(batDauLT));
+      }
+    }
     B.luyenTap.forEach(function (q, i) {
       var c = tao("div", "np-cau"), dau = tao("div", "np-cau-dau");
       dau.appendChild(tao("span", "np-cau-so", String(i + 1)));
@@ -193,11 +215,12 @@
       var daXong = false;
       function hoanThanh(nhan, lop) { if (!daXong) { daXong = true; xong++; c.classList.add("xong"); capNhat(); } ph.textContent = ""; ph.appendChild(tao("span", lop, nhan)); cham.hidden = true; }
       var xem = nut("ttv-nut-phu", "Xem gợi ý", function () {
+        if (!batDauLT) batDauLT = Date.now();
         dap.classList.add("mo"); xem.hidden = true; cham.hidden = false;
       });
       cham.hidden = true;
       cham.appendChild(tao("span", "np-ghi-chu-nho", "Câu trả lời của em có giống ý này không?"));
-      cham.appendChild(nut("ttv-nut-phu", "👍 Giống rồi", function () { hoanThanh("Đúng rồi!", "ttv-nhan-dung"); }));
+      cham.appendChild(nut("ttv-nut-phu", "👍 Giống rồi", function () { if (!daXong) giongNgay++; hoanThanh("Đúng rồi!", "ttv-nhan-dung"); }));
       cham.appendChild(nut("ttv-nut-phu", "🤔 Chưa giống", function () {
         ph.textContent = ""; ph.appendChild(tao("span", "ttv-nhan-sai", "Thử lại nhé"));
         ph.appendChild(tao("p", null, "Các bạn đọc lại gợi ý rồi nói lại câu trả lời cho đúng nhé."));
@@ -226,6 +249,7 @@
     if (coCham) v.appendChild(tao("p", "np-loi-dan", "✍️ " + cv.loiDan));
     var lb = tao("label", null, coCham ? "Bài viết của em" : "Em viết ở đây (không bắt buộc)"); lb.htmlFor = "o-van-dung";
     var tl = tao("textarea"); tl.id = "o-van-dung"; tl.rows = 4; tl.setAttribute("spellcheck", "false");
+    var batDauViet = 0; tl.addEventListener("input", function () { if (!batDauViet) batDauViet = Date.now(); });
     v.appendChild(lb); v.appendChild(tl);
     v.appendChild(tao("p", "np-ghi-chu-nho", "Chữ các bạn viết chỉ để tập, không được lưu lại và không gửi đi đâu."));
     the.appendChild(v);
@@ -274,6 +298,7 @@
         });
         bangCham.appendChild(nl);
       }
+      ghiKetQua("viet", r.soDat, r.tong, r.sao, giayTu(batDauViet));
       if (r.sao === 3) { xongVanDung(); }
       else bangCham.appendChild(nut("ttv-nut-phu", "✏️ Sửa bài", function () { tl.focus(); tl.scrollIntoView({ behavior: "smooth", block: "center" }); }));
     }

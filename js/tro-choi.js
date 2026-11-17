@@ -33,7 +33,10 @@
   function veHoi(khung, v) { if (v.hoi) khung.appendChild(tao("p", "tc-hoi", v.hoi)); }
   function moTaTranh(t) { return t.tu ? t.nhanTu + " gọi " + t.nhanDen : (t.chu || ""); }
 
+  // Đếm lượt đúng / sai của trò đang chơi (để gửi kết quả lên cổng khi xong trò)
+  var dem = null;
   function phanHoi(o, dung, them) {
+    if (dem) { if (dung) dem.dung++; else dem.sai++; }
     o.textContent = "";
     o.appendChild(tao("span", dung ? "ttv-nhan-dung" : "ttv-nhan-sai", dung ? "Đúng rồi!" : "Thử lại nhé"));
     if (them) o.appendChild(tao("span", "tc-them", them));
@@ -200,7 +203,8 @@
   };
   var BIEU = { chonTranh: "🖼️", xepCau: "🧩", chamTu: "👆", phanLoai: "🧺" };
 
-  /** Vẽ chuỗi trò chơi vào khung. tuyChon.xong() khi xong trò cuối. */
+  /** Vẽ chuỗi trò chơi vào khung. tuyChon.xong() khi xong trò cuối.
+   *  tuyChon.xongTro(j, { dung, sai, giay }) mỗi lần chơi xong trò thứ j (0, 1, 2…), kể cả khi chơi lại. */
   function ve(khung, ds, tuyChon) {
     var j = 0;
     function moTro() {
@@ -215,7 +219,10 @@
       the.appendChild(tao("p", "tc-huong-dan", tc.huongDan || HUONG_DAN[tc.loai]));
       var choi = tao("div", "tc-choi"); the.appendChild(choi);
       khung.appendChild(the);
+      var luot = { dung: 0, sai: 0, batDau: Date.now() }; dem = luot;
       LOAI[tc.loai](choi, tc, function () {
+        if (dem === luot) dem = null;
+        if (tuyChon && tuyChon.xongTro) { try { tuyChon.xongTro(j, { dung: luot.dung, sai: luot.sai, giay: Math.round((Date.now() - luot.batDau) / 1000) }); } catch (e) {} }
         choi.textContent = "";
         var xong = tao("div", "tc-xong");
         xong.appendChild(tao("span", "ttv-nhan-dung", "Đúng rồi!"));
