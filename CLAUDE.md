@@ -80,6 +80,6 @@ HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/
 - Tranh: assets/tranh/ (tranh vẽ riêng cho bài giảng). Bài không có tranh riêng dùng tranh của chủ đề.
 - Sửa css/ hoặc js/, data/ thì nâng số ?v= trong index.html và bai.html để máy tải bản mới.
 - Khoá lưu sao: nguphap:baiN → { sao: { khoiDong, khamPha, troChoi, luyenTap, vanDung } }. Không đổi tên. Bài viết của bé không được lưu.
-- Chưa có âm thanh: khi có tệp giọng Elio thì thêm nút Nghe; không dùng giọng máy.
+- Chưa có âm thanh: danh sách câu cần đọc ở giong-ai/can-doc.tsv (node tools/tao-can-doc.js); giọng chuẩn của trường là giọng AI Kore (robot giong-ai, chưa bật ở kho này). Khi đã có tệp trong audio/bai-N/ thì thêm nút Nghe (TTV.phat); không dùng giọng máy.
 - Màu góc (xanh chàm #5868D0 / #2F3D96 / #E6E9FA) và ảnh Trâu Con (trau-thinking.png, tạm dùng chung với Tiếng Việt cơ bản) lấy từ TTV_DANH_SACH, id "nguphap".
 - Ghi kết quả học: bai.html gọi TTV.ghiKetQua với bai "bai-N"; hoatDong "tro-1", "tro-2"… (theo thứ tự NP_TRO_CHOI[N].troChoi, mỗi lần chơi xong một trò), "luyen-tap" (xong 3 câu), "viet" (mỗi lần Trâu Con chấm bài); soTroChoi = số trò + luyện tập + chấm viết (nếu có). Không thêm khoá localStorage.
