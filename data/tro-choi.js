@@ -200,7 +200,7 @@
         chon("Cá, tôm, cua nuôi hay đánh bắt dưới nước gọi chung là gì?", "", ["búp bê", "ga", "thủy sản"], 2, null, "🐟🦐🦀")
       ] }),
       tro("chonTranh", "Ghép nguyên hay ghép rút?", { vong: [
-        chon("Tên này được tạo thế nào?", "Vinataba", ["Ghép rút: lấy một phần các tiếng", "Ghép nguyên: giữ cả chuỗi từ"], 0),
+        chon("Tên này được tạo thế nào?", "Vinamilk", ["Ghép rút: lấy một phần các tiếng", "Ghép nguyên: giữ cả chuỗi từ"], 0),
         chon("Tên này được tạo thế nào?", "Khai Trí Tiến Đức", ["Ghép rút: lấy một phần các tiếng", "Ghép nguyên: giữ cả chuỗi từ"], 1)
       ] })
     ],

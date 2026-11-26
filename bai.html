@@ -7,10 +7,10 @@
 <meta name="theme-color" content="#FFF8EC">
 <meta name="robots" content="noimageindex">
 <link rel="stylesheet" href="https://mau.cvcec.org/v1/cvcec-chung.css">
-<link rel="stylesheet" href="css/ngu-phap.css?v=2">
+<link rel="stylesheet" href="css/ngu-phap.css?v=3">
 <script src="https://mau.cvcec.org/v1/cvcec-chung.js" defer></script>
-<script src="data/bai-hoc.js?v=2"></script>
-<script src="data/tro-choi.js?v=2"></script>
+<script src="data/bai-hoc.js?v=3"></script>
+<script src="data/tro-choi.js?v=3"></script>
 <script src="js/chung.js?v=2"></script>
 <script src="js/tro-choi.js?v=3"></script>
 <script src="js/cham-viet.js?v=2"></script>
@@ -50,6 +50,20 @@
   function trauNoi(anh, cau) {
     var o = tao("div", "np-trau"), im = tao("img"); im.src = NP.trau(anh); im.alt = ""; o.appendChild(im);
     var bong = tao("div", "ttv-bong-thoai"); cau.forEach(function (c) { bong.appendChild(tao("p", null, c)); }); o.appendChild(bong); return o;
+  }
+  // Nút Nghe: phát tệp giọng chuẩn (audio/bai-N/<ten>.mp3, danh sách ở giong-ai/can-doc.tsv) qua TTV.phat.
+  // Nút chỉ hiện khi tệp đã có trên trang; không truyền chữ nên không bao giờ đọc bằng giọng máy.
+  var tepCo = {};
+  function coTep(tep) {
+    if (!tepCo[tep]) tepCo[tep] = (window.fetch ? fetch(tep, { method: "HEAD" }).then(function (r) { return r.ok; }) : Promise.resolve(false))["catch"](function () { return false; });
+    return tepCo[tep];
+  }
+  function nghe(el, ten) {
+    var tep = "audio/bai-" + B.so + "/" + ten + ".mp3";
+    var b = nut("np-nghe", "🔊", function () { if (window.TTV && TTV.phat) TTV.phat({ tep: tep }); });
+    b.setAttribute("aria-label", "Nghe"); b.title = "Nghe"; b.hidden = true;
+    coTep(tep).then(function (co) { b.hidden = !co; });
+    el.appendChild(b); return el;
   }
   function goiY(cacDoan) {
     var doan = cacDoan.filter(function (x) { return x; }); if (!doan.length) return null;
@@ -112,7 +126,7 @@
     var c = NP.chuong(B.chuong), the = tao("div", "np-the vien-goc");
     var im = tao("img", "np-tranh"); im.src = NP.anhBai(B); im.alt = "Tranh minh hoạ của bài"; the.appendChild(im);
     the.appendChild(tao("p", null, "")).appendChild(tao("span", "np-chip-bai", "Bài " + B.so + " · " + (c ? c.ten : "")));
-    var dau = tao("div", "np-the-dau"); dau.appendChild(tao("h1", null, B.ten));
+    var dau = tao("div", "np-the-dau"); dau.appendChild(nghe(tao("h1", null, B.ten), "ten"));
     var en = tao("p", "np-giai-en"); en.lang = "en";
     en.appendChild(tao("b", null, "Lesson " + B.so + ": " + B.en.ten + ". ")); en.appendChild(document.createTextNode("Goal: " + B.en.mucTieu));
     var ne = nut("np-en", "EN", function () { var mo = !en.classList.contains("mo"); en.classList.toggle("mo", mo); ne.setAttribute("aria-expanded", String(mo)); });
@@ -125,7 +139,7 @@
 
     m.appendChild(trauNoi("trau-thinking.png", ["Các bạn ơi, trước khi học, mình hỏi các bạn một câu nhé:"]));
     var hoi = tao("div", "np-the");
-    hoi.appendChild(tao("p", "np-cau-hoi", B.cauHoi));
+    hoi.appendChild(nghe(tao("p", "np-cau-hoi", B.cauHoi), "cau-hoi"));
     hoi.appendChild(tao("p", "np-ghi-chu-nho", "Các bạn nghĩ một chút rồi nói to câu trả lời. Học xong bài này, mình cùng xem các bạn đoán có đúng không nhé!"));
     m.appendChild(hoi);
     var gy = goiY([B.goiY.khoiDong, B.trang ? "Tham chiếu giáo trình: " + B.trang + "." : ""]); if (gy) m.appendChild(gy);
@@ -135,21 +149,21 @@
   }
 
   /* ---------- 2. Khám phá: 4 thẻ ---------- */
-  function veViDu(k) {
+  function veViDu(k, K) {
     var vd = tao("div", "np-vd");
     var soCot = k.nhip ? k.nhip.reduce(function (a, b) { return a + b; }, 0) : Math.max.apply(null, k.hang.map(function (r) { return r.length; }).concat([1]));
     var laBang = k.cot && k.cot.length > 0;
     if (laBang) {
       var dau = tao("div", "np-vd-cot"); dau.style.gridTemplateColumns = "repeat(" + soCot + ", minmax(0, 1fr))";
       k.cot.forEach(function (t, i) { var o = tao("div", "cot", t); if (k.nhip) o.style.gridColumn = "span " + k.nhip[i]; dau.appendChild(o); });
-      dau.setAttribute("aria-hidden", "true"); vd.appendChild(dau);
+      dau.setAttribute("aria-hidden", "true"); var bocDau = tao("div", "np-vd-hang"); bocDau.appendChild(dau); vd.appendChild(bocDau);
     }
     // "dam": ô nền đậm như trên slide (trung tâm, người thực hiện…) để mắt bé tìm ngay phần chính
     k.hang.forEach(function (r, j) {
       var hang = tao("div", "np-vd-cot" + (r.length === 1 ? " np-vd-cau" : ""));
       hang.style.gridTemplateColumns = "repeat(" + (laBang ? soCot : r.length) + ", minmax(0, 1fr))";
       r.forEach(function (o, i) { var dam = k.dam && k.dam[j] && k.dam[j][i]; hang.appendChild(tao("div", "np-o" + (dam ? " dam" : ""), o)); });
-      vd.appendChild(hang);
+      var boc = tao("div", "np-vd-hang"); boc.appendChild(hang); vd.appendChild(nghe(boc, K + "-h" + (j + 1)));
     });
     return vd;
   }
@@ -160,9 +174,10 @@
     var cham = tao("div", "np-cham"); cham.setAttribute("aria-hidden", "true");
     B.khamPha.forEach(function (_, i) { cham.appendChild(tao("span", i === theKP ? "dang" : i < theKP ? "da" : "")); });
     dem.appendChild(cham); the.appendChild(dem);
-    the.appendChild(tao("h2", null, k.ten));
-    the.appendChild(veViDu(k));
-    var g = tao("div", "np-giai"); k.giai.forEach(function (x) { g.appendChild(tao("p", null, x)); }); the.appendChild(g);
+    var K = "kp" + (theKP + 1);
+    the.appendChild(nghe(tao("h2", null, k.ten), K + "-ten"));
+    the.appendChild(veViDu(k, K));
+    var g = tao("div", "np-giai"); k.giai.forEach(function (x, j) { g.appendChild(nghe(tao("p", null, x), K + "-g" + (j + 1))); }); the.appendChild(g);
     m.appendChild(the);
     var gy = goiY([k.goiY]); if (gy) m.appendChild(gy);
     var dh = tao("div", "np-dieu-huong");
@@ -207,9 +222,9 @@
     B.luyenTap.forEach(function (q, i) {
       var c = tao("div", "np-cau"), dau = tao("div", "np-cau-dau");
       dau.appendChild(tao("span", "np-cau-so", String(i + 1)));
-      dau.appendChild(tao("p", "np-lt-hoi", q.hoi)); c.appendChild(dau);
+      dau.appendChild(nghe(tao("p", "np-lt-hoi", q.hoi), "lt" + (i + 1) + "-hoi")); c.appendChild(dau);
       var tl = tao("textarea"); tl.rows = 2; tl.placeholder = "Em viết câu trả lời ở đây (không bắt buộc)…"; tl.setAttribute("aria-label", "Câu trả lời của em cho câu " + (i + 1)); c.appendChild(tl);
-      var dap = tao("div", "np-dap"); dap.appendChild(tao("b", null, "Gợi ý: ")); dap.appendChild(document.createTextNode(q.dap));
+      var dap = tao("div", "np-dap"); dap.appendChild(tao("b", null, "Gợi ý: ")); dap.appendChild(document.createTextNode(q.dap)); nghe(dap, "lt" + (i + 1) + "-dap");
       if (/^Ví dụ/.test(q.dap)) dap.appendChild(tao("span", "np-ghi-chu-nho", " · Câu này có nhiều cách trả lời đúng."));
       var cham = tao("div", "np-tu-cham"), ph = tao("div", "np-phan-hoi");
       var daXong = false;
@@ -241,7 +256,7 @@
     m.appendChild(trauNoi("trau-cheer.png", ["Bây giờ đến lượt các bạn!", "Các bạn làm việc này cùng bố mẹ, hoặc trong giờ học với thầy cô nhé."]));
     var the = tao("div", "np-the vien-goc");
     the.appendChild(tao("h2", null, "Vận dụng"));
-    the.appendChild(tao("p", "np-nhiem-vu", B.vanDung));
+    the.appendChild(nghe(tao("p", "np-nhiem-vu", B.vanDung), "van-dung"));
     var cv = NP.troChoi(B.so).chamViet, coCham = !!(cv && window.NPChamViet);
     var ketQua = tao("div");
     function xongVanDung() { choSao("vanDung"); veKetQua(ketQua); ketQua.scrollIntoView({ behavior: "smooth", block: "center" }); }

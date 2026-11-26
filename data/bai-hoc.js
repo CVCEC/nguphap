@@ -874,10 +874,10 @@ window.NGU_PHAP = {
      "cot": [],
      "hang": [
       [
-       "Vinataba"
+       "Vinamilk"
       ],
       [
-       "Việt Nam và tên ngành thuốc lá"
+       "Việt Nam và milk (sữa)"
       ]
      ],
      "dam": [
@@ -891,7 +891,7 @@ window.NGU_PHAP = {
      "giai": [
       "Tên có thể hình thành bằng cách lấy một phần của các tiếng hoặc từ rồi kết hợp lại."
      ],
-     "goiY": "Khám phá (4–5 phút). Dùng Vinataba làm ví dụ minh họa kiểu rút gọn trong giáo trình. Cùng lớp thử tạo tên hư cấu cho câu lạc bộ đọc sách và giải thích phần nào đã được rút."
+     "goiY": "Khám phá (4–5 phút). Dùng Vinamilk (tên một hãng sữa) làm ví dụ minh họa kiểu rút gọn. Cùng lớp thử tạo tên hư cấu cho câu lạc bộ đọc sách và giải thích phần nào đã được rút."
     }
    ],
    "luyenTap": [

@@ -379,3 +379,13 @@ main.np-chinh { padding: 0 16px 32px; }
 .tc-o-hang.doc .tc-o { min-height: 52px; font-size: 1.15rem; }
 .tc-the-hang.doc .tc-the { font-size: 1.15rem; text-align: left; }
 @media (max-width: 600px) { .tc-gio { padding: 10px 6px; } .tc-gio-ten { font-size: .92rem; } }
+
+/* Nút Nghe (chỉ hiện khi đã có tệp giọng chuẩn trong audio/bai-N/) */
+.np-nghe { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-left: 8px; padding: 0;
+  vertical-align: middle; border: 2px solid var(--ttv-goc); border-radius: 50%; background: #fff; font-size: 1.2rem; line-height: 1; cursor: pointer; }
+.np-nghe[hidden] { display: none; }
+.np-nghe:active { background: var(--ttv-goc-nhat); }
+.np-nghe:focus-visible { outline: 3px solid var(--ttv-goc-dam); outline-offset: 2px; }
+.np-vd-hang { position: relative; }
+.np-vd-hang > .np-nghe { position: absolute; right: 0; top: 50%; transform: translateY(-50%); margin: 0; }
+.np-vd:has(.np-vd-hang > .np-nghe:not([hidden])) .np-vd-hang { padding-right: 52px; }
