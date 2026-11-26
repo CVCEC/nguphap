@@ -15,4 +15,4 @@ Robot trên GitHub Actions (`.github/workflows/giong-ai.yml` → `tools/giong_ai
 - Tệp lưu ở `audio/bai-N/` (tên tệp xem đầu `tools/tao-can-doc.js`). Sửa `data/bai-hoc.js` thì chạy lại `node tools/tao-can-doc.js`.
 - Trang bài **chưa có nút Nghe** (CLAUDE.md: thêm khi đã có tệp giọng). Khi robot đọc xong một số bài, thêm nút Nghe gọi `TTV.phat({ tep, chu })`.
 - Trần 10 lượt gọi mỗi ngày (`TOI_DA_LUOT` trong `chay.txt`).
-- **Chưa bật:** kho này chưa có tệp `.github/workflows/giong-ai.yml`. Bật robot: chép tệp đó từ kho CVCEC/mau-chung (đổi `group: giong-ai-mau-chung` thành `giong-ai-nguphap`, giờ chạy `25 9 * * *`), và kiểm tra kho dùng được secret `GEMINI_API_KEY`.
+- Robot bật từ 26-11-2026 (`.github/workflows/giong-ai.yml`, mỗi ngày 09:25 UTC).
