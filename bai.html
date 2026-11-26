@@ -12,7 +12,7 @@
 <script src="data/bai-hoc.js?v=2"></script>
 <script src="data/tro-choi.js?v=2"></script>
 <script src="js/chung.js?v=2"></script>
-<script src="js/tro-choi.js?v=3"></script>
+<script src="js/tro-choi.js?v=4"></script>
 <script src="js/cham-viet.js?v=2"></script>
 </head>
 <body class="ttv-trang" data-ttv-nen="don-gian">
@@ -69,9 +69,17 @@
     return (t.troChoi ? t.troChoi.length : 0) + (B.luyenTap && B.luyenTap.length ? 1 : 0) + (t.chamViet && window.NPChamViet ? 1 : 0);
   }
   function saoTheoTiLe(diem, toiDa) { var r = toiDa ? diem / toiDa : 0; return r >= 0.9 ? 3 : r >= 0.6 ? 2 : r > 0 ? 1 : 0; }
-  function ghiKetQua(hoatDong, diem, diemToiDa, sao, giay) {
+  /* cau (không bắt buộc): kết quả từng câu [{ ma, tu, dung, mang, loi }]; mã câu có tiền tố "bN-" cho ổn định qua các lần chơi.
+     tu luôn là câu / từ / tiêu chí ĐÍCH lấy từ dữ liệu bài, không bao giờ là chữ bé viết. Bộ mẫu cũ bỏ qua cau. */
+  function ghiKetQua(hoatDong, diem, diemToiDa, sao, giay, cau) {
     try {
-      if (window.TTV && TTV.ghiKetQua) TTV.ghiKetQua({ bai: "bai-" + B.so, hoatDong: hoatDong, soTroChoi: soTroChoi(), diem: diem, diemToiDa: diemToiDa, sao: sao, thoiGianGiay: giay });
+      var kq = { bai: "bai-" + B.so, hoatDong: hoatDong, soTroChoi: soTroChoi(), diem: diem, diemToiDa: diemToiDa, sao: sao, thoiGianGiay: giay };
+      if (cau && cau.length) kq.cau = cau.slice(0, 40).map(function (c) {
+        var o = { ma: "b" + B.so + "-" + c.ma, tu: String(c.tu || "").normalize("NFC").replace(/\s+/g, " ").trim().slice(0, 30), dung: !!c.dung, mang: c.mang };
+        if (!c.dung && c.loi) o.loi = c.loi;
+        return o;
+      });
+      if (window.TTV && TTV.ghiKetQua) TTV.ghiKetQua(kq);
     } catch (e) {}
   }
   function giayTu(t) { return t ? Math.round((Date.now() - t) / 1000) : 0; }
@@ -185,7 +193,7 @@
       hang.appendChild(nut("ttv-nut phai", "Sang Luyện tập ›", function () { moBuoc("luyenTap"); }));
     }, xongTro: function (j, kq) {
       var dung = Math.max(kq.dung, 1), toiDa = dung + kq.sai;
-      ghiKetQua("tro-" + (j + 1), dung, toiDa, saoTheoTiLe(dung, toiDa), kq.giay);
+      ghiKetQua("tro-" + (j + 1), dung, toiDa, saoTheoTiLe(dung, toiDa), kq.giay, kq.cau);
     } });
     var gy = goiY(["Trò chơi giúp bé luyện lại điều vừa khám phá. Nếu bé chọn sai, hãy hỏi: “Con nhìn xem từ nào đứng đầu câu?” rồi để bé tự thử lại. Bé có thể chơi lại nhiều lần."]);
     if (gy) m.appendChild(gy);
@@ -195,13 +203,15 @@
   function veLuyenTap() {
     var m = $("man-luyenTap"); m.textContent = "";
     m.appendChild(trauNoi("trau-reading.png", ["Các bạn thử sức với 3 câu này nhé!", "Nói to câu trả lời trước, viết vào ô nếu muốn, rồi bấm “Xem gợi ý” để đối chiếu."]));
-    var ds = tao("div", "np-lt"), xong = 0, giongNgay = 0, batDauLT = 0;
+    var ds = tao("div", "np-lt"), xong = 0, giongNgay = 0, batDauLT = 0, cauLT = [];
     var nutTiep = nut("ttv-nut phai", "Sang Vận dụng ›", function () { moBuoc("vanDung"); });
     var nhac = tao("p", "np-ghi-chu-nho", "Các bạn làm đủ 3 câu để nhận sao nhé.");
     function capNhat() {
       if (xong === B.luyenTap.length) {
         choSao("luyenTap"); nhac.textContent = "Các bạn làm xong cả 3 câu rồi. Được 1 sao!";
-        ghiKetQua("luyen-tap", giongNgay, B.luyenTap.length, saoTheoTiLe(giongNgay, B.luyenTap.length), giayTu(batDauLT));
+        // Từng câu: tu = gợi ý đáp án trong dữ liệu bài; dung = bấm "Giống rồi" ngay. Bé tự đối chiếu nên không đoán loại lỗi.
+        ghiKetQua("luyen-tap", giongNgay, B.luyenTap.length, saoTheoTiLe(giongNgay, B.luyenTap.length), giayTu(batDauLT),
+          B.luyenTap.map(function (q, i) { return { ma: "lt-c" + (i + 1), tu: String(q.dap || q.hoi).replace(/^Ví dụ\s*:?\s*/, ""), dung: !!cauLT[i], mang: "ngu-phap" }; }));
       }
     }
     B.luyenTap.forEach(function (q, i) {
@@ -220,7 +230,7 @@
       });
       cham.hidden = true;
       cham.appendChild(tao("span", "np-ghi-chu-nho", "Câu trả lời của em có giống ý này không?"));
-      cham.appendChild(nut("ttv-nut-phu", "👍 Giống rồi", function () { if (!daXong) giongNgay++; hoanThanh("Đúng rồi!", "ttv-nhan-dung"); }));
+      cham.appendChild(nut("ttv-nut-phu", "👍 Giống rồi", function () { if (!daXong) { giongNgay++; cauLT[i] = true; } hoanThanh("Đúng rồi!", "ttv-nhan-dung"); }));
       cham.appendChild(nut("ttv-nut-phu", "🤔 Chưa giống", function () {
         ph.textContent = ""; ph.appendChild(tao("span", "ttv-nhan-sai", "Thử lại nhé"));
         ph.appendChild(tao("p", null, "Các bạn đọc lại gợi ý rồi nói lại câu trả lời cho đúng nhé."));
@@ -298,7 +308,15 @@
         });
         bangCham.appendChild(nl);
       }
-      ghiKetQua("viet", r.soDat, r.tong, r.sao, giayTu(batDauViet));
+      // Từng tiêu chí Trâu Con chấm: tu = tên tiêu chí (không gửi bài viết); tiêu chí "mem" máy chưa chắc thì bỏ qua.
+      var cauViet = [];
+      r.ketQua.forEach(function (k, i) {
+        if (k.hoi) return;
+        var loai = (cv.tuDong[i] || {}).loai;
+        cauViet.push({ ma: "viet-" + (i + 1), tu: k.ten, dung: k.dat, mang: "viet",
+          loi: /^(vietHoa|dauCau|coDau)$/.test(loai) ? "chinh-ta" : loai === "soCau" ? "khac" : "ngu-phap" });
+      });
+      ghiKetQua("viet", r.soDat, r.tong, r.sao, giayTu(batDauViet), cauViet);
       if (r.sao === 3) { xongVanDung(); }
       else bangCham.appendChild(nut("ttv-nut-phu", "✏️ Sửa bài", function () { tl.focus(); tl.scrollIntoView({ behavior: "smooth", block: "center" }); }));
     }

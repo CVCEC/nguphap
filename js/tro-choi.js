@@ -35,6 +35,14 @@
 
   // Đếm lượt đúng / sai của trò đang chơi (để gửi kết quả lên cổng khi xong trò)
   var dem = null;
+  /* Ghi kết quả từng câu của trò đang chơi: ma = mã câu trong trò ("c2", "the3"), tu = câu / từ ĐÍCH lấy từ dữ liệu
+     (không bao giờ là chữ của bé), dung = đúng ngay lần đầu, loi = loại lỗi khi sai. */
+  function ghiCau(ma, tu, dung, loi) {
+    if (!dem) return;
+    var c = { ma: ma, tu: String(tu || "").normalize("NFC").replace(/\s+/g, " ").trim().slice(0, 30), dung: !!dung, mang: "ngu-phap" };
+    if (!dung && loi) c.loi = loi;
+    dem.cau.push(c);
+  }
   function phanHoi(o, dung, them) {
     if (dem) { if (dung) dem.dung++; else dem.sai++; }
     o.textContent = "";
@@ -52,7 +60,7 @@
     var i = 0;
     function ve() {
       khung.textContent = "";
-      var v = tc.vong[i], daXong = false;
+      var v = tc.vong[i], daXong = false, daSai = false;
       khung.appendChild(chamVong(tc.vong.length, i));
       veHoi(khung, v);
       if (v.hinh) khung.appendChild(tao("div", "tc-hinh", v.hinh)).setAttribute("aria-hidden", "true");
@@ -63,8 +71,9 @@
           if (daXong) return;
           if (l.dung) {
             daXong = true; b.classList.add("dung"); phanHoi(ph, true);
+            ghiCau("c" + (i + 1), l.tranh.chu || v.cau || moTaTranh(l.tranh), !daSai, "ngu-phap");
             setTimeout(function () { i++; if (i < tc.vong.length) ve(); else xongTro(); }, 900);
-          } else { b.classList.add("sai"); rung(b); phanHoi(ph, false, l.nhac || tc.nhac || "Các bạn đọc lại câu rồi chọn lại nhé."); }
+          } else { daSai = true; b.classList.add("sai"); rung(b); phanHoi(ph, false, l.nhac || tc.nhac || "Các bạn đọc lại câu rồi chọn lại nhé."); }
         });
         b.setAttribute("aria-label", (l.tranh.chu ? "" : "Tranh " + (j + 1) + ": ") + moTaTranh(l.tranh));
         b.appendChild(veTranh(l.tranh)); luoi.appendChild(b);
@@ -79,7 +88,7 @@
     var i = 0;
     function ve() {
       khung.textContent = "";
-      var v = tc.vong[i], o = [], daXong = false;
+      var v = tc.vong[i], o = [], daXong = false, daSai = false;
       khung.appendChild(chamVong(tc.vong.length, i));
       veHoi(khung, v);
       if (v.tranh) { var tr = tao("div", "tc-tranh-de"); tr.appendChild(veTranh(v.tranh)); khung.appendChild(tr); }
@@ -106,8 +115,9 @@
           daXong = true; oTrong.forEach(function (s) { s.classList.add("dung"); });
           var hoan = v.hien || hoaDau(v.dung); if (!/[.!?…]$/.test(hoan)) hoan += ".";
           phanHoi(ph, true, hoan);
+          ghiCau("c" + (i + 1), hoan, !daSai, "trat-tu"); // thẻ đã đặt đủ, chỉ có thể sai thứ tự
           setTimeout(function () { i++; if (i < tc.vong.length) ve(); else xongTro(); }, 1300);
-        } else { oTrong.forEach(function (s) { s.classList.add("sai"); }); rung(hang); phanHoi(ph, false, "Chạm vào ô để bỏ thẻ ra, rồi xếp lại nhé."); }
+        } else { daSai = true; oTrong.forEach(function (s) { s.classList.add("sai"); }); rung(hang); phanHoi(ph, false, "Chạm vào ô để bỏ thẻ ra, rồi xếp lại nhé."); }
       }
       khung.appendChild(hang); khung.appendChild(kho); khung.appendChild(ph);
     }
@@ -123,15 +133,16 @@
       khung.appendChild(chamVong(tc.vong.length, i));
       veHoi(khung, v);
       if (v.hinh) khung.appendChild(tao("div", "tc-hinh", v.hinh)).setAttribute("aria-hidden", "true");
-      var cau = tao("p", "tc-cau tc-cau-tu"), ph = tao("div", "tc-phan-hoi"); ph.setAttribute("aria-live", "polite");
+      var daSai = false, cau = tao("p", "tc-cau tc-cau-tu"), ph = tao("div", "tc-phan-hoi"); ph.setAttribute("aria-live", "polite");
       v.cau.forEach(function (t, k) {
         if (/^[.,!?…:;]$/.test(t)) { cau.appendChild(tao("span", "tc-dau", t)); return; }
         var b = nut("tc-tu", t, function () {
           if (daXong) return;
           if (v.dung.indexOf(k) >= 0) {
             daXong = true; b.classList.add("dung"); phanHoi(ph, true);
+            ghiCau("c" + (i + 1), v.dung.map(function (x) { return v.cau[x]; }).join(" "), !daSai, "ngu-phap");
             setTimeout(function () { i++; if (i < tc.vong.length) ve(); else xongTro(); }, 900);
-          } else { b.classList.add("sai"); rung(b); phanHoi(ph, false, tc.nhac || ""); }
+          } else { daSai = true; b.classList.add("sai"); rung(b); phanHoi(ph, false, tc.nhac || ""); }
         });
         cau.appendChild(b);
       });
@@ -157,12 +168,13 @@
         c.el.remove(); var nho = tao("span", "tc-the-nho", c.the.chu); gio[j]._trong.appendChild(nho);
         gio[j].classList.add("vui"); setTimeout(function () { gio[j].classList.remove("vui"); }, 400);
         chon = null; conLai--; phanHoi(ph, true);
+        ghiCau("the" + (c.so + 1), c.the.chu, !c.daSai, "ngu-phap");
         if (!conLai) setTimeout(xongTro, 900);
-      } else { rung(c.el); rung(gio[j]); boChon(); phanHoi(ph, false, "“" + c.the.chu + "” không thuộc giỏ này."); }
+      } else { c.daSai = true; rung(c.el); rung(gio[j]); boChon(); phanHoi(ph, false, "“" + c.the.chu + "” không thuộc giỏ này."); }
     }
-    tc.the.forEach(function (t) {
+    tc.the.forEach(function (t, so) {
       var b = nut("tc-the keo-duoc", t.chu); b.setAttribute("aria-pressed", "false");
-      var c = { the: t, el: b };
+      var c = { the: t, el: b, so: so, daSai: false };
       b.addEventListener("click", function () { if (b._vuaKeo) { b._vuaKeo = false; return; } var dang = chon === c; boChon(); if (!dang) { chon = c; b.setAttribute("aria-pressed", "true"); } });
       // Kéo thả bằng Pointer Events
       var keo = null;
@@ -204,7 +216,7 @@
   var BIEU = { chonTranh: "🖼️", xepCau: "🧩", chamTu: "👆", phanLoai: "🧺" };
 
   /** Vẽ chuỗi trò chơi vào khung. tuyChon.xong() khi xong trò cuối.
-   *  tuyChon.xongTro(j, { dung, sai, giay }) mỗi lần chơi xong trò thứ j (0, 1, 2…), kể cả khi chơi lại. */
+   *  tuyChon.xongTro(j, { dung, sai, giay, cau }) mỗi lần chơi xong trò thứ j (0, 1, 2…), kể cả khi chơi lại. */
   function ve(khung, ds, tuyChon) {
     var j = 0;
     function moTro() {
@@ -219,10 +231,11 @@
       the.appendChild(tao("p", "tc-huong-dan", tc.huongDan || HUONG_DAN[tc.loai]));
       var choi = tao("div", "tc-choi"); the.appendChild(choi);
       khung.appendChild(the);
-      var luot = { dung: 0, sai: 0, batDau: Date.now() }; dem = luot;
+      var luot = { dung: 0, sai: 0, cau: [], batDau: Date.now() }; dem = luot;
       LOAI[tc.loai](choi, tc, function () {
         if (dem === luot) dem = null;
-        if (tuyChon && tuyChon.xongTro) { try { tuyChon.xongTro(j, { dung: luot.dung, sai: luot.sai, giay: Math.round((Date.now() - luot.batDau) / 1000) }); } catch (e) {} }
+        if (tuyChon && tuyChon.xongTro) { try { tuyChon.xongTro(j, { dung: luot.dung, sai: luot.sai, giay: Math.round((Date.now() - luot.batDau) / 1000),
+          cau: luot.cau.map(function (c) { var o = {}; for (var x in c) o[x] = c[x]; o.ma = "t" + (j + 1) + "-" + c.ma; return o; }) }); } catch (e) {} }
         choi.textContent = "";
         var xong = tao("div", "tc-xong");
         xong.appendChild(tao("span", "ttv-nhan-dung", "Đúng rồi!"));
