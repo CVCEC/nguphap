@@ -1,0 +1,21 @@
+Lô 20 câu: khoảng lặng chưa rõ, cắt theo mốc chữ của Whisper
+1.00  Bài 1. Ngữ pháp quanh em.  |  Bài 1. Ngữ pháp quanh em
+1.00  “Bà gọi cháu” hay “Cháu gọi bà”?  |  Bà gọi cháu, hay cháu gọi bà?
+1.00  Quy tắc kết hợp.  |  Quy tắc kết hợp
+1.00  Bà gọi cháu.  |  Bà gọi cháu
+1.00  Cháu gọi bà.  |  Cháu gọi bà
+1.00  Cùng ba từ, đổi chỗ hai người thì người thực hiện hành động thay đổi.  |  Cùng 3 từ đổi chỗ 2 người thì người thực hiện hành động thay đổi.
+0.33  Nghĩa từ vựng.  |  nghĩa tư vượng.
+0.67  bút, vở, thước.  |  bút vờ thước
+1.00  Mỗi từ gọi tên một đồ vật khác nhau. Đó là nghĩa từ vựng của từ.  |  Mỗi từ gọi tên một đồ vật khác nhau, đó là nghĩa từ vựng của từ.
+0.75  Ý nghĩa ngữ pháp.  |  Yên nghĩa ngữ pháp
+1.00  một cây bút.  |  một cây bút
+1.00  ba cây bút.  |  3 cây bút
+1.00  Từ “bút” vẫn gọi tên cùng một loại đồ vật.  |  Từ bút, vẫn gọi tên cùng một loại đồ vật.
+1.00  “Một” và “ba” cho biết số lượng khác nhau.  |  1 và 3 cho biết số lượng khác nhau.
+1.00  Dạng thức ngữ pháp.  |  dạng thức ngữ pháp
+1.00  one book / two books.  |  One book? Two books?
+1.00  một quyển sách / hai quyển sách.  |  Một quyển sách Hai quyển sách
+1.00  Trong ví dụ tiếng Anh, “book” đổi thành “books”.  |  trong ví dụ tiếng Anh, BOOK đổi thành BOOKS
+1.00  Trong tiếng Việt, từ “sách” giữ nguyên hình thức.  |  Trong tiếng Việt, từ sách giữ nguyên hình thức.
+1.00  Ai mở cửa trong “Em mở cửa cho chị”?  |  Ai mở cửa trong Em mở cửa cho chị.
