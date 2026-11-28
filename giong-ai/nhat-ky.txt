@@ -4,3 +4,13 @@
 0.92  Cụm nào cho biết số nhiều, “một cái mũ” hay “ba cái mũ”?  |  Cụ nào cho biết số nhiều? Một cái mũ hay ba cái mũ?
 1.00  “Ba cái mũ” cho biết có ba chiếc.  |  Ba cái mũ cho biết có ba chiếc.
 1.00  Nói hai câu về một đồ vật trước mặt em, mỗi câu dùng một số lượng khác nhau.  |  Nói hai câu về một đồ vật trước mặt em, mỗi câu dùng một số lượng khác nhau.
+Lô 18 câu – Gemini không trả tiếng: không có tiếng trả về: {"candidates": [{"finishReason": "SAFETY", "index": 0, "finishMessage": "The audio stream could not be completed. Please retry your reque
+1.00  Bài 2. Cách tiếng Việt biểu đạt ý nghĩa.  |  Bài 2 Cách tiếng Việt biểu đạt ý nghĩa
+1.00  “Em đọc sách.” Em đọc lúc nào?  |  Em đọc sách Em đọc lúc nào
+0.33  Từ đi kèm.  |  Tự đi kem
+1.00  đang đọc, sẽ đọc, chưa đọc.  |  Đang đọc, sẽ đọc, chưa đọc
+1.00  “Đang” chỉ việc đang diễn ra. “Sẽ” hướng tới việc sau thời điểm nói. “Chưa” cho biết việc chưa xảy ra tính đến một mốc.  |  Đang, chỉ việc đang diễn ra Sẽ, hướng tới việc sau thời điểm nói Chưa, cho biết việc chưa xảy ra tính đến một mốc
+0.80  Trật tự và ngữ điệu.  |  chật tự và ngữ điệu.
+0.33  Em chờ mẹ., Mẹ chờ em., Em chờ mẹ?  |  Em chửi mẹ
+0.95  Trật tự đổi vai của người tham gia. Ngữ điệu có thể biến một lời kể thành câu hỏi xác nhận.  |  Chặt tự đổi vai của người tham gia. Ngữ điệu có thể biến một lời kể thành câu hỏi xác nhận.
+1.00  Phương thức và phạm trù.  |  phương thức và phạm trù.
