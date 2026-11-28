@@ -13,6 +13,6 @@ Robot trên GitHub Actions (`.github/workflows/giong-ai.yml` → `tools/giong_ai
 
 ## Riêng góc Ngữ pháp (25-11-2026)
 - Tệp lưu ở `audio/bai-N/` (tên tệp xem đầu `tools/tao-can-doc.js`). Sửa `data/bai-hoc.js` thì chạy lại `node tools/tao-can-doc.js`.
-- Trang bài **chưa có nút Nghe** (CLAUDE.md: thêm khi đã có tệp giọng). Khi robot đọc xong một số bài, thêm nút Nghe gọi `TTV.phat({ tep, chu })`.
+- Trang bài đã có nút 🔊 Nghe (26-11-2026): nút của câu nào chỉ hiện khi tệp mp3 của câu đó đã có, nên robot đọc xong tới đâu, nút hiện tới đó, không cần sửa trang.
 - Trần 10 lượt gọi mỗi ngày (`TOI_DA_LUOT` trong `chay.txt`).
 - Robot bật từ 26-11-2026 (`.github/workflows/giong-ai.yml`, mỗi ngày 09:25 UTC).

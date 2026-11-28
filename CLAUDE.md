@@ -71,6 +71,7 @@ HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/
 
 ## Riêng kho này (nguphap.cvcec.org – Ngữ pháp tiếng Việt)
 - 37 bài, 3 phần: Tập 1 (Bài 1–16: Mở đầu, Cấu tạo từ, Từ loại), Tập 2 (Bài 17–34: Cụm từ, Câu đơn và câu trong văn bản, Câu ghép, Mục đích nói và phủ định), Phần bổ sung (Bài 35–37: Hiểu ý trong hội thoại).
+- Bài 6 thẻ "Dạng ghép rút" dùng ví dụ Vinamilk (thay Vinataba – tên hãng thuốc lá – từ 26-11-2026).
 - Nội dung lấy từ 3 bộ slide bài giảng (16-11-2026), soạn theo giáo trình của Diệp Quang Ban. Không ghi link bản PDF toàn văn của giáo trình lên trang.
 - Trang chủ: index.html (Mục tiêu học tập · Học xong các bạn có thể · Tổng quan nội dung · Hướng dẫn cho cha mẹ & thầy cô · Danh sách bài).
 - Trang bài dùng chung: bai.html#bai-1 … #bai-37. Mỗi bài 5 bước: Khởi động · Khám phá (4 thẻ) · Trò chơi · Luyện tập (3 câu, tự đối chiếu gợi ý) · Vận dụng (Trâu Con chấm bài viết).
@@ -80,6 +81,6 @@ HTML/CSS/JS thuần; dữ liệu bài trong const BAI_HOC đầu script; chạm/
 - Tranh: assets/tranh/ (tranh vẽ riêng cho bài giảng). Bài không có tranh riêng dùng tranh của chủ đề.
 - Sửa css/ hoặc js/, data/ thì nâng số ?v= trong index.html và bai.html để máy tải bản mới.
 - Khoá lưu sao: nguphap:baiN → { sao: { khoiDong, khamPha, troChoi, luyenTap, vanDung } }. Không đổi tên. Bài viết của bé không được lưu.
-- Chưa có âm thanh: danh sách câu cần đọc ở giong-ai/can-doc.tsv (node tools/tao-can-doc.js); giọng chuẩn của trường là giọng AI Kore (robot giong-ai, bật từ 26-11-2026, trần 10 lượt/ngày). Khi đã có tệp trong audio/bai-N/ thì thêm nút Nghe (TTV.phat); không dùng giọng máy.
-- Màu góc (xanh chàm #5868D0 / #2F3D96 / #E6E9FA) và ảnh Trâu Con (trau-thinking.png, tạm dùng chung với Tiếng Việt cơ bản) lấy từ TTV_DANH_SACH, id "nguphap".
+- Chưa có âm thanh: danh sách câu cần đọc ở giong-ai/can-doc.tsv (node tools/tao-can-doc.js); giọng chuẩn của trường là giọng AI Kore (robot giong-ai, bật từ 26-11-2026, trần 10 lượt/ngày). Nút 🔊 Nghe (bai.html, hàm nghe) đã gắn sẵn cho tên bài, câu hỏi, thẻ Khám phá, Luyện tập, Vận dụng; nút chỉ hiện khi tệp tương ứng trong audio/bai-N/ đã có, phát bằng TTV.phat({ tep }) không kèm chữ nên không dùng giọng máy.
+- Màu góc (xanh chàm #5868D0 / #2F3D96 / #E6E9FA) và ảnh Trâu Con (trau-flag.png, từ 26-11-2026; banner trang chủ dùng ảnh này) lấy từ TTV_DANH_SACH, id "nguphap".
 - Ghi kết quả học: bai.html gọi TTV.ghiKetQua với bai "bai-N"; hoatDong "tro-1", "tro-2"… (theo thứ tự NP_TRO_CHOI[N].troChoi, mỗi lần chơi xong một trò), "luyen-tap" (xong 3 câu), "viet" (mỗi lần Trâu Con chấm bài); soTroChoi = số trò + luyện tập + chấm viết (nếu có). Không thêm khoá localStorage.

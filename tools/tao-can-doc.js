@@ -10,7 +10,7 @@
      ltK-hoi.mp3 / ltK-dap.mp3   câu hỏi và gợi ý đáp án Luyện tập K (1–3)
      van-dung.mp3       đề Vận dụng
    Không đọc: gợi ý cho cha mẹ & thầy cô (goiY), phần tiếng Anh.
-   Trang chưa có nút Nghe (CLAUDE.md: thêm khi đã có tệp giọng). */
+   Trang bài có nút Nghe cho từng câu; nút chỉ hiện khi tệp đã có. Giữ tên tệp khớp với hàm nghe() trong bai.html. */
 "use strict";
 var fs = require("fs"), path = require("path");
 var GOC = path.join(__dirname, "..");
